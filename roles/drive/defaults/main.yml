@@ -1,0 +1,16 @@
+---
+drive_architectures:
+  arm64: armv8
+  armv5l: armv5
+  armv6l: armv6
+  armv7l: armv7
+  x86_64: "{{ (ansible_system == 'Darwin') | ternary('darwin', 'linux') }}"
+drive_version: 0.4.0
+drive_url: "https://github.com/odeke-em/drive/releases/download/v{{ drive_version }}/drive_{{ drive_architectures[ansible_architecture] }}"
+# drive_checksum: md5:
+drive_path: /usr/local/bin/drive
+# drive_cron:
+#   d:
+#   daily:
+#   hourly:
+#   weekly:

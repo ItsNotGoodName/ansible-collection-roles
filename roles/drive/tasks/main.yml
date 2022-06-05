@@ -1,0 +1,53 @@
+---
+- block:
+    - name: Download drive
+      ansible.builtin.get_url:
+        checksum: "{{ drive_checksum | default(omit) }}"
+        dest: "{{ drive_path }}"
+        url: "{{ drive_url }}"
+        mode: 0755
+
+    - name: Create facts directory
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Update facts
+      ansible.builtin.copy:
+        content: "{{ drive_facts | to_nice_json }}"
+        dest: /etc/ansible/facts.d/drive.fact
+        owner: root
+        group: root
+        mode: 0644
+
+  become: true
+  tags: drive
+  when: ansible_facts.ansible_local['drive'] is not defined or (ansible_facts.ansible_local.drive.version | string) != (drive_version | string)
+
+- block:
+    - name: Copy cron scripts
+      ansible.builtin.copy:
+        content: "{{ item.value }}"
+        dest: "/etc/cron.{{ item.key }}/ansible_drive_{{ item.key }}"
+        owner: "root"
+        group: "root"
+        mode: 0755
+      loop: "{{ drive_cron | dict2items }}"
+
+    - name: Remove cron scripts
+      ansible.builtin.file:
+        path: "/etc/cron.{{ item }}/ansible_drive_{{ item }}"
+        state: absent
+      when: item not in drive_cron
+      loop:
+        - d
+        - daily
+        - hourly
+        - weekly
+
+  become: true
+  tags: drive
+  when: drive_cron is defined
