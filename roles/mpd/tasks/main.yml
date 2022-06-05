@@ -1,0 +1,28 @@
+---
+- name: Install
+  ansible.builtin.package:
+    name: "{{ mpd_package }}"
+    state: present
+  become: true
+  tags: mpd
+
+- name: Copy config
+  ansible.builtin.copy:
+    content: "{{ mpd_config }}"
+    dest: "{{ mpd_config_path }}"
+    mode: 0644
+  become: true
+  notify: restart mpd
+  tags: mpd
+  when: mpd_config is defined
+
+- name: Enable service
+  ansible.builtin.service:
+    name: mpd
+    enabled: true
+  become: true
+  tags: mpd
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: mpd

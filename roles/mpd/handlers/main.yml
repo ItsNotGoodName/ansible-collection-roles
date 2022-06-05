@@ -1,0 +1,6 @@
+---
+- name: restart mpd
+  ansible.builtin.service:
+    name: mpd
+    state: restarted
+  become: true

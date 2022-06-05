@@ -1,0 +1,4 @@
+---
+mpd_package: mpd
+mpd_config_path: /etc/mpd.conf
+# mpd_config:
