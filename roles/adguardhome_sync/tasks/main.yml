@@ -1,9 +1,9 @@
 ---
 - name: Create user
   ansible.builtin.user:
-    name: "{{ adguardhomesync_user }}"
+    name: "{{ adguardhome_sync_user }}"
   become: true
-  tags: adguardhomesync
+  tags: adguardhome_sync
 
 - import_tasks: install.yml
 
@@ -16,23 +16,23 @@
     mode: 0644
   become: true
   notify: restart adguardhome-sync
-  tags: adguardhomesync
+  tags: adguardhome_sync
 
 - name: Copy config
   ansible.builtin.copy:
-    content: "{{ adguardhomesync_config | to_nice_yaml }}"
-    dest: "{{ adguardhomesync_config_dir }}/.adguardhome-sync.yaml"
-    owner: "{{ adguardhomesync_user }}"
-    group: "{{ adguardhomesync_group }}"
+    content: "{{ adguardhome_sync_config | to_nice_yaml }}"
+    dest: "{{ adguardhome_sync_dir }}/.adguardhome-sync.yaml"
+    owner: "{{ adguardhome_sync_user }}"
+    group: "{{ adguardhome_sync_group }}"
     mode: 0600
   become: true
   notify: restart adguardhome-sync
-  tags: adguardhomesync
-  when: adguardhomesync_config is defined
+  tags: adguardhome_sync
+  when: adguardhome_sync_config is defined
 
 - name: Enable service
   ansible.builtin.systemd:
     name: adguardhome-sync
     enabled: true
   become: true
-  tags: adguardhomesync
+  tags: adguardhome_sync

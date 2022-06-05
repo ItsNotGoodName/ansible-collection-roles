@@ -1,0 +1,11 @@
+[Unit]
+Description=AdGuard Home Sync
+
+[Service]
+ExecStart={{ adguardhome_sync_path }} run
+WorkingDirectory={{ adguardhome_sync_dir }}
+User={{ adguardhome_sync_user }}
+Group={{ adguardhome_sync_group }}
+
+[Install]
+WantedBy=multi-user.target

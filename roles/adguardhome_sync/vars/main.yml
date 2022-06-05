@@ -1,0 +1,3 @@
+---
+adguardhome_sync_facts:
+  version: "{{ adguardhome_sync_version }}"

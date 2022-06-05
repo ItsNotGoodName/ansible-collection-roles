@@ -1,20 +1,20 @@
 ---
-adguardhomesync_architectures:
+adguardhome_sync_architectures:
   arm64: arm64
   armv5l: armv5
   armv6l: armv6
   armv7l: armv7
   i386: i386
   x86_64: x86_64
-adguardhomesync_platform: "{{ ansible_system | lower }}_{{ adguardhomesync_architectures[ansible_architecture] }}"
-adguardhomesync_version: 0.4.3
-adguardhomesync_url: "https://github.com/bakito/adguardhome-sync/releases/download/v{{ adguardhomesync_version }}/adguardhome-sync_{{ adguardhomesync_version }}_{{ adguardhomesync_platform }}.tar.gz"
-# adguardhomesync_checksum: sha256:
-adguardhomesync_path: /usr/local/bin/adguardhome-sync
-adguardhomesync_user: adguardhome-sync
-adguardhomesync_group: "{{ adguardhomesync_user }}"
-adguardhomesync_config_dir: "/home/{{ adguardhomesync_user }}"
-# adguardhomesync_config:
+adguardhome_sync_platform: "{{ ansible_system | lower }}_{{ adguardhome_sync_architectures[ansible_architecture] }}"
+adguardhome_sync_version: 0.4.3
+adguardhome_sync_url: "https://github.com/bakito/adguardhome-sync/releases/download/v{{ adguardhome_sync_version }}/adguardhome-sync_{{ adguardhome_sync_version }}_{{ adguardhome_sync_platform }}.tar.gz"
+# adguardhome_sync_checksum: sha256:
+adguardhome_sync_path: /usr/local/bin/adguardhome-sync
+adguardhome_sync_user: adguardhome-sync
+adguardhome_sync_group: "{{ adguardhome_sync_user }}"
+adguardhome_sync_dir: "/home/{{ adguardhome_sync_user }}"
+# adguardhome_sync_config:
 #   # cron expression to run in daemon mode. (default; "" = runs only once)
 #   cron: "*/10 * * * *"
 #

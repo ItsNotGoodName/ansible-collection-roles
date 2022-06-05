@@ -1,3 +1,0 @@
----
-adguardhomesync_facts:
-  version: "{{ adguardhomesync_version }}"
