@@ -1,0 +1,13 @@
+[Unit]
+Description=File Browser
+After=network.target
+
+[Service]
+ExecStart={{ filebrowser_path }}
+WorkingDirectory={{ filebrowser_dir }}
+User={{ filebrowser_user }}
+Group={{ filebrowser_group }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

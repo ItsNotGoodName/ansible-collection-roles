@@ -1,0 +1,44 @@
+---
+- name: Check if already installed
+  ansible.builtin.stat:
+    path: "{{ filebrowser_path }}"
+  register: filebrowser_binary_register
+  tags: filebrowser
+
+- name: Get installed version
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ filebrowser_path }} version | grep -oP "File\ Browser\ v\K[0-9]*\.[0-9]*\.[0-9]*"
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: filebrowser_version_register
+  tags: filebrowser
+  when: filebrowser_binary_register.stat.exists
+
+- name: Install filebrowser
+  block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ filebrowser_url }}"
+        checksum: "{{ filebrowser_checksum | default(omit) }}"
+        dest: /tmp/filebrowser.tar.gz
+        mode: 0644
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: /tmp/filebrowser.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      ansible.builtin.copy:
+        src: /tmp/filebrowser
+        dest: "{{ filebrowser_path }}"
+        mode: 0755
+        remote_src: true
+      notify: restart filebrowser
+
+  become: true
+  tags: filebrowser
+  when: not filebrowser_binary_register.stat.exists or (filebrowser_version_register.stdout | default('')) != filebrowser_version

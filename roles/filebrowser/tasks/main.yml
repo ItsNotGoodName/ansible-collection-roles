@@ -1,0 +1,66 @@
+---
+- name: Merge config with default config
+  ansible.builtin.set_fact:
+    filebrowser_config: "{{ filebrowser_config_default | combine(filebrowser_config) }}"
+  tags: filebrowser
+
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ filebrowser_user }}"
+    group: "{{ filebrowser_group }}"
+  become: true
+  notify: restart filebrowser
+  tags: filebrowser
+
+- import_tasks: install.yml
+
+- name: Template service
+  ansible.builtin.template:
+    src: service.j2
+    dest: /etc/systemd/system/filebrowser.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart filebrowser
+  tags: filebrowser
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ filebrowser_dir }}"
+    state: directory
+    owner: "{{ filebrowser_user }}"
+    group: "{{ filebrowser_group }}"
+  become: true
+  notify: restart filebrowser
+  tags: filebrowser
+
+- name: Create root directory
+  ansible.builtin.file:
+    path: "{{ filebrowser_config.root }}"
+    state: directory
+  become: true
+  notify: restart filebrowser
+  tags: filebrowser
+
+- name: Copy config
+  ansible.builtin.copy:
+    content: "{{ filebrowser_config | to_nice_yaml }}"
+    dest: "{{ filebrowser_dir }}/.filebrowser.yml"
+    owner: "{{ filebrowser_user }}"
+    group: "{{ filebrowser_group }}"
+    mode: 0600
+  become: true
+  notify: restart filebrowser
+  tags: filebrowser
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: filebrowser
+    enabled: true
+  become: true
+  tags: filebrowser
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: filebrowser

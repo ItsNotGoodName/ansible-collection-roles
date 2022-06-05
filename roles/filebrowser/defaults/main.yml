@@ -1,0 +1,21 @@
+---
+filebrowser_architectures:
+  arm64: arm64
+  armv5l: armv5
+  armv6l: armv6
+  armv7l: armv7
+  i386: 386
+  x86_64: amd64
+filebrowser_version: 2.22.0
+filebrowser_platform: "{{ ansible_system | lower }}-{{ filebrowser_architectures[ansible_architecture] }}"
+filebrowser_url: "https://github.com/filebrowser/filebrowser/releases/download/v{{ filebrowser_version }}/{{ filebrowser_platform }}-filebrowser.tar.gz"
+# filebrowser_checksum:
+filebrowser_path: /usr/local/bin/filebrowser
+filebrowser_user: filebrowser
+filebrowser_group: "{{ filebrowser_user }}"
+filebrowser_dir: "/home/{{ filebrowser_user }}"
+filebrowser_config_default:
+  address: 0.0.0.0
+  noauth: true
+  root: "/home/{{ filebrowser_user }}/filebrowser"
+filebrowser_config: {}
