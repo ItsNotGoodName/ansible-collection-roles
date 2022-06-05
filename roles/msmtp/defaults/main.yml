@@ -1,0 +1,7 @@
+---
+msmtp_packages:
+  - msmtp
+  - msmtp-mta
+msmtp_user: root
+msmtp_group: "{{ msmtp_config_user }}"
+# msmtp_config:
