@@ -1,0 +1,16 @@
+---
+adguardhome_architectures:
+  arm64: arm64
+  armv5l: armv5
+  armv6l: armv6
+  armv7l: armv7
+  i386: 386
+  x86_64: amd64
+adguardhome_platform: "{{ ansible_system | lower }}_{{ adguardhome_architectures[ansible_architecture] }}"
+adguardhome_version: 0.107.6
+adguardhome_url: "https://github.com/AdguardTeam/AdGuardHome/releases/download/v{{ adguardhome_version }}/AdGuardHome_{{ adguardhome_platform }}.tar.gz"
+# adguardhome_checksum: sha256:
+adguardhome_path: /usr/local/bin/adguardhome
+adguardhome_user: adguardhome
+adguardhome_group: "{{ adguardhome_user }}"
+adguardhome_dir: "/home/{{ adguardhome_user }}"

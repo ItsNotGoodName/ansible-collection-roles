@@ -1,0 +1,26 @@
+---
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ adguardhome_user }}"
+  become: true
+  tags: adguardhome
+
+- import_tasks: install.yml
+
+- name: Template service
+  ansible.builtin.template:
+    src: service.j2
+    dest: /etc/systemd/system/adguardhome.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart adguardhome
+  tags: adguardhome
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: adguardhome
+    enabled: true
+  become: true
+  tags: adguardhome
