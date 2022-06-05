@@ -1,0 +1,19 @@
+---
+- name: Apply remove-nag patch
+  ansible.builtin.patch:
+    src: remove-nag.patch
+    dest: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+  become: true
+  tags: proxmox
+
+- name: Disable HA services due to high SSD wear
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop:
+    - pve-ha-crm
+    - pve-ha-lrm
+  become: true
+  tags: proxmox
+  when: proxmox_ha_disable | bool
