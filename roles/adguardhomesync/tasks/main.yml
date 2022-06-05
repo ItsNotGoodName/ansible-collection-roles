@@ -1,0 +1,38 @@
+---
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ adguardhomesync_user }}"
+  become: true
+  tags: adguardhomesync
+
+- import_tasks: install.yml
+
+- name: Template service
+  ansible.builtin.template:
+    src: service.j2
+    dest: /etc/systemd/system/adguardhome-sync.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart adguardhome-sync
+  tags: adguardhomesync
+
+- name: Copy config
+  ansible.builtin.copy:
+    content: "{{ adguardhomesync_config | to_nice_yaml }}"
+    dest: "{{ adguardhomesync_config_dir }}/.adguardhome-sync.yaml"
+    owner: "{{ adguardhomesync_user }}"
+    group: "{{ adguardhomesync_group }}"
+    mode: 0600
+  become: true
+  notify: restart adguardhome-sync
+  tags: adguardhomesync
+  when: adguardhomesync_config is defined
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: adguardhome-sync
+    enabled: true
+  become: true
+  tags: adguardhomesync

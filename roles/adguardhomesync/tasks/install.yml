@@ -1,0 +1,42 @@
+---
+- block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ adguardhomesync_url }}"
+        checksum: "{{ adguardhomesync_checksum | default(omit) }}"
+        dest: /tmp/adguardhome-sync.tar.gz
+        mode: 0644
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: /tmp/adguardhome-sync.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      ansible.builtin.copy:
+        src: /tmp/adguardhome-sync
+        dest: "{{ adguardhomesync_path }}"
+        mode: 0755
+        remote_src: true
+      notify: restart adguardhome-sync
+
+    - name: Create facts directory
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Update facts
+      ansible.builtin.copy:
+        content: "{{ adguardhomesync_facts | to_nice_json }}"
+        dest: /etc/ansible/facts.d/adguardhomesync.fact
+        owner: root
+        group: root
+        mode: 0644
+
+  become: true
+  tags: adguardhomesync
+  when: ansible_facts.ansible_local['adguardhomesync'] is not defined or (ansible_facts.ansible_local.adguardhomesync.version | string) != (adguardhomesync_version | string)
