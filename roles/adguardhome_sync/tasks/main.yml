@@ -36,3 +36,7 @@
     enabled: true
   become: true
   tags: adguardhome_sync
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: adguardhome_sync
