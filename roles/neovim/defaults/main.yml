@@ -9,4 +9,4 @@ neovim_links_enable: false
 neovim_links:
   - v
   - vi
-    vim
+  - vim
