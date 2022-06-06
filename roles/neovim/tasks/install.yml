@@ -1,0 +1,27 @@
+---
+- name: Check if already installed
+  ansible.builtin.stat:
+    path: "{{ neovim_path }}"
+  register: neovim_binary_register
+  tags: neovim
+
+- name: Get installed version
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ neovim_path }} --version | head -n1 | cut -f2 -d 'v'
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: neovim_version_register
+  tags: neovim
+  when: neovim_binary_register.stat.exists
+
+- name: Install
+  ansible.builtin.get_url:
+    url: "{{ neovim_url_appimage }}"
+    checksum: "{{ neovim_checksum_appimage | default(omit) }}"
+    dest: "{{ neovim_path }}"
+    mode: 0755
+  become: true
+  tags: neovim
+  when: not neovim_binary_register.stat.exists or (neovim_version_register.stdout | default('')) != neovim_version

@@ -1,0 +1,12 @@
+---
+neovim_version: 0.7.0
+neovim_url_deb: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/nvim-linux64.deb"
+# neovim_checksum_deb:
+neovim_url_appimage: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/nvim.appimage"
+# neovim_checksum_appimage:
+neovim_path: /usr/local/bin/nvim
+neovim_links_enable: false
+neovim_links:
+  - v
+  - vi
+    vim

@@ -1,0 +1,14 @@
+---
+- include_tasks:
+    file: 'install{{ (ansible_os_family == "Debian") | ternary("-Debian", "") }}.yml'
+  tags: neovim
+
+- name: Create links
+  ansible.builtin.file:
+    src: nvim
+    path: "/usr/bin/{{ item }}"
+    state: link
+  loop: "{{ neovim_links }}"
+  become: true
+  tags: neovim
+  when: neovim_links_enable | bool
