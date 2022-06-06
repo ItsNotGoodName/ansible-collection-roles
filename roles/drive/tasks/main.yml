@@ -1,6 +1,6 @@
 ---
 - block:
-    - name: Download drive
+    - name: Download
       ansible.builtin.get_url:
         checksum: "{{ drive_checksum | default(omit) }}"
         dest: "{{ drive_path }}"
