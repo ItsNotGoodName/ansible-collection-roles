@@ -16,7 +16,8 @@
   tags: filebrowser
   when: filebrowser_binary_register.stat.exists
 
-- block:
+- name: Install
+  block:
     - name: Download
       ansible.builtin.get_url:
         url: "{{ filebrowser_url }}"

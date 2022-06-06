@@ -16,7 +16,8 @@
   when: adguardhome_binary_register.stat.exists
   tags: adguardhome
 
-- block:
+- name: Install
+  block:
     - name: Download
       ansible.builtin.get_url:
         url: "{{ adguardhome_url }}"

@@ -1,6 +1,7 @@
 ---
-- block:
-    - name: Download
+- name: Install
+  block:
+    - name: Download and install
       ansible.builtin.get_url:
         checksum: "{{ drive_checksum | default(omit) }}"
         dest: "{{ drive_path }}"
@@ -27,7 +28,8 @@
   tags: drive
   when: ansible_facts.ansible_local['drive'] is not defined or (ansible_facts.ansible_local.drive.version | string) != (drive_version | string)
 
-- block:
+- name: Cron
+  block:
     - name: Copy cron scripts
       ansible.builtin.copy:
         content: "{{ item.value }}"

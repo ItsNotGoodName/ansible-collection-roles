@@ -1,5 +1,6 @@
 ---
-- block:
+- name: Install
+  block:
     - name: Download
       ansible.builtin.get_url:
         url: "{{ adguardhome_sync_url }}"

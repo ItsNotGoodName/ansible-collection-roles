@@ -9,12 +9,14 @@
   register: neovim_version_register
   tags: neovim
 
-- block:
+- name: Install
+  block:
     - name: Download
       ansible.builtin.get_url:
         url: "{{ neovim_url_deb }}"
         checksum: "{{ neovim_checksum_deb | default(omit) }}"
         dest: /tmp/nvim-linux64.deb
+        mode: 0644
 
     - name: Install
       ansible.builtin.apt:
