@@ -2,7 +2,7 @@
 - name: Get installed version
   ansible.builtin.shell: |
     set -o pipefail
-    (dpkg-query -s neovim || echo "Version: 1.0.0") | grep Version: | cut -f2 -d ' '
+    (dpkg-query -s neovim || echo "Version: 0.0.0") | grep Version: | cut -f2 -d ' '
   args:
     executable: /bin/bash
   changed_when: false
