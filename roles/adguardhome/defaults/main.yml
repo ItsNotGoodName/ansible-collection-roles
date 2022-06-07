@@ -7,7 +7,7 @@ adguardhome_architectures:
   i386: 386
   x86_64: amd64
 adguardhome_platform: "{{ ansible_system | lower }}_{{ adguardhome_architectures[ansible_architecture] }}"
-adguardhome_version: 0.107.6
+adguardhome_version: 0.107.7
 adguardhome_url: "https://github.com/AdguardTeam/AdGuardHome/releases/download/v{{ adguardhome_version }}/AdGuardHome_{{ adguardhome_platform }}.tar.gz"
 # adguardhome_checksum:
 adguardhome_path: /usr/local/bin/AdGuardHome
