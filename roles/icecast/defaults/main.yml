@@ -1,0 +1,5 @@
+---
+icecast_package: icecast
+icecast_service: icecast
+icecast_path_config: /etc/icecast.xml
+# icecast_config:

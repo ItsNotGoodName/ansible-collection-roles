@@ -1,20 +1,20 @@
 ---
 - name: Install ssh server
-  package:
+  ansible.builtin.package:
     name: "{{ sshd_package }}"
     state: present
   become: true
   tags: sshd
 
 - name: Start ssh server
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ sshd_service }}"
     state: started
   become: true
   tags: sshd
 
 - name: Configure sshd config
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
@@ -32,5 +32,5 @@
   tags: sshd
 
 - name: flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
   tags: sshd
