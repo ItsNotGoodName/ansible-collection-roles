@@ -1,0 +1,23 @@
+---
+scrutiny_collector_packages:
+  - smartmontools
+scrutiny_collector_architectures:
+  arm64: arm64
+  armv5l: arm-5
+  armv6l: arm-6
+  armv7l: arm-7
+  x86_64: amd64
+scrutiny_collector_version: 0.5.0
+scrutiny_collector_platform: "{{ ansible_system | lower }}-{{ scrutiny_collector_architectures[ansible_architecture] }}"
+scrutiny_collector_url: "https://github.com/AnalogJ/scrutiny/releases/download/v{{ scrutiny_collector_version }}/scrutiny-collector-metrics-{{ scrutiny_collector_platform }}"
+# scrutiny_collector_checksum:
+scrutiny_collector_path: /usr/local/bin/scrutiny-collector-metrics
+
+scrutiny_collector_cron: true
+scrutiny_collector_cron_minute: "*/15"
+scrutiny_collector_cron_hour: "*"
+scrutiny_collector_cron_month: "*"
+scrutiny_collector_cron_weekday: "*"
+
+scrutiny_collector_api_endpoint: http://localhost:8080
+scrutiny_collector_host_id: ""

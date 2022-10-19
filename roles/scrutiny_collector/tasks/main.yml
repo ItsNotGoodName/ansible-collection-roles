@@ -1,0 +1,9 @@
+---
+- name: Install dependencies
+  ansible.builtin.package:
+    name: "{{ scrutiny_collector_packages }}"
+    state: present
+  become: true
+  tags: scrutiny_collector
+
+- import_tasks: install.yml
