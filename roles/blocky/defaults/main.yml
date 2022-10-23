@@ -1,0 +1,17 @@
+---
+blocky_platform: "{{ ansible_system }}_{{ ansible_architecture }}"
+blocky_version: 0.19
+blocky_url: "https://github.com/0xERR0R/blocky/releases/download/v{{ blocky_version }}/blocky_{{ blocky_version }}_{{ blocky_platform }}.tar.gz"
+# blocky_checksum:
+blocky_path: /usr/local/bin/blocky
+blocky_user: blocky
+blocky_group: "{{ blocky_user }}"
+blocky_dir: "/home/{{ blocky_user }}"
+blocky_config_path: "{{ blocky_dir }}/.blocky.yml"
+blocky_config:
+  upstream:
+    default:
+      # Cloudflare
+      - 1.1.1.1
+      # Google
+      - 8.8.8.8
