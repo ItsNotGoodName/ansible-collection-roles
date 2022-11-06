@@ -1,13 +1,22 @@
 ---
+- name: Include OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "vars/{{ ansible_os_family }}.yml"
+      skip: true
+  tags: sshd
+
 - name: Install ssh server
   ansible.builtin.package:
     name: "{{ sshd_package }}"
     state: present
   become: true
   tags: sshd
+  when: sshd_package != ''
 
 - name: Start ssh server
-  ansible.builtin.systemd:
+  ansible.builtin.service:
     name: "{{ sshd_service }}"
     state: started
   become: true
