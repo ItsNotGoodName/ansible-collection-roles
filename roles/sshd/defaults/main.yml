@@ -1,6 +1,6 @@
 ---
 sshd_package: openssh-server
-sshd_service: ssh.service
+sshd_service: "ssh.{{ (ansible_virtualization_type == 'lxc') | ternary('socket', 'service') }}"
 
 sshd_password_authentication: false
 sshd_permit_root_login: false
