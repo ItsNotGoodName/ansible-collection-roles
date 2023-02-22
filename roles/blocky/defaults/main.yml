@@ -1,6 +1,6 @@
 ---
 blocky_platform: "{{ ansible_system }}_{{ ansible_architecture }}"
-blocky_version: 0.19
+blocky_version: "0.20"
 blocky_url: "https://github.com/0xERR0R/blocky/releases/download/v{{ blocky_version }}/blocky_{{ blocky_version }}_{{ blocky_platform }}.tar.gz"
 # blocky_checksum:
 blocky_path: /usr/local/bin/blocky
