@@ -1,0 +1,4 @@
+---
+wireguard_ui_facts:
+  version: "{{ wireguard_ui_version }}"
+

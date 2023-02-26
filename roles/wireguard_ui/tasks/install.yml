@@ -1,0 +1,43 @@
+---
+- name: Install
+  block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ wireguard_ui_url }}"
+        checksum: "{{ wireguard_ui_checksum | default(omit) }}"
+        dest: /tmp/wireguard-ui.tar.gz
+        mode: 0644
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: /tmp/wireguard-ui.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      ansible.builtin.copy:
+        src: /tmp/wireguard-ui
+        dest: "{{ wireguard_ui_path }}"
+        mode: 0755
+        remote_src: true
+      notify: restart wireguard-ui
+
+    - name: Create facts directory
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Update facts
+      ansible.builtin.copy:
+        content: "{{ wireguard_ui_facts | to_nice_json }}"
+        dest: /etc/ansible/facts.d/wireguard_ui.fact
+        owner: root
+        group: root
+        mode: 0644
+
+  become: true
+  tags: wireguard_ui
+  when: ansible_facts.ansible_local['wireguard_ui'] is not defined or (ansible_facts.ansible_local.wireguard_ui.version | string) != (wireguard_ui_version | string)

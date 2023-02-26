@@ -1,0 +1,17 @@
+[Unit]
+Description=WireGuard web interface
+
+[Service]
+ExecStart={{ wireguard_ui_path }}{% if wireguard_ui_bind_address is defined %} --bind-address {{ wireguard_ui_bind_address }}{% endif %}
+
+WorkingDirectory={{ wireguard_ui_dir }}
+User=root
+Group=root
+{% if wireguard_ui_env is defined %}
+{% for k,v in wireguard_ui_env.items() %}
+Environment="{{ k }}={{ v }}"
+{% endfor %}
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

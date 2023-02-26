@@ -1,0 +1,20 @@
+---
+wireguard_ui_architectures:
+  arm64: arm64
+  armv5l: armv5
+  armv6l: armv6
+  armv7l: armv7
+  i386: 386
+  x86_64: amd64
+wireguard_ui_platform: "{{ ansible_system | lower }}-{{ wireguard_ui_architectures[ansible_architecture] }}"
+wireguard_ui_version: 0.4.0
+wireguard_ui_url: "https://github.com/ngoduykhanh/wireguard-ui/releases/download/v{{ wireguard_ui_version }}/wireguard-ui-v{{ wireguard_ui_version }}-{{ wireguard_ui_platform }}.tar.gz"
+# wireguard_ui_checksum:
+wireguard_ui_path: /usr/local/bin/wireguard-ui
+wireguard_ui_dir: /opt/wireguard-ui
+wireguard_ui_packages:
+  - wireguard
+
+wireguard_ui_config_file_path: /etc/wireguard/wg0.conf
+wireguard_ui_config_file_dir: "{{ wireguard_ui_config_file_path | dirname }}"
+# wireguard_ui_env:

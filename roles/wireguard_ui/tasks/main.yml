@@ -1,0 +1,77 @@
+---
+- name: Install packages
+  package:
+    name: "{{ wireguard_ui_packages }}"
+    state: present
+  become: true
+  tags: wireguard_ui
+
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ wireguard_ui_dir }}"
+    owner: root
+    group: root
+    mode: 0600
+    state: directory
+  loop:
+    - "{{ wireguard_ui_dir }}"
+    - "{{ wireguard_ui_config_file_dir }}"
+  become: true
+  tags: wireguard_ui
+
+- import_tasks: install.yml
+
+- name: Template services
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - wireguard-ui-watch.path
+    - wireguard-ui-watch.service
+    - wireguard-ui.service
+  notify: restart wireguard-ui
+  tags: wireguard_ui
+  become: true
+
+- name: Enable and start wireguard_ui.service
+  ansible.builtin.systemd:
+    name: wireguard-ui.service
+    state: started
+    enabled: true
+  tags: wireguard_ui
+  become: true
+
+- name: Wait for WireGuard config file to be created
+  ansible.builtin.wait_for:
+    path: "{{ wireguard_ui_config_file_path }}"
+  tags: wireguard_ui
+  become: true
+
+- name: Enable and start wireguard-ui-watch.path
+  ansible.builtin.systemd:
+    name: wireguard-ui-watch.path
+    state: started
+    enabled: true
+  tags: wireguard_ui
+  become: true
+
+- name: Enable wireguard-ui-watch.service
+  ansible.builtin.systemd:
+    name: wireguard-ui-watch.service
+    enabled: true
+  tags: wireguard_ui
+  become: true
+
+- name: Enable wg-quick@wg0
+  ansible.builtin.systemd:
+    name: wg-quick@wg0
+    enabled: true
+  tags: wireguard_ui
+  become: true
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: wireguard_ui
