@@ -28,12 +28,45 @@
 
 - name: Add scrutiny_collector to cron
   ansible.builtin.cron:
-    name: "scrutiny_collector cron"
+    name: scrutiny_collector cron
     minute: "{{ scrutiny_collector_cron_minute }}"
     hour: "{{ scrutiny_collector_cron_hour }}"
     month: "{{ scrutiny_collector_cron_month }}"
     weekday: "{{ scrutiny_collector_cron_weekday }}"
-    job: "{{ scrutiny_collector_path }} run --api-endpoint={{ scrutiny_collector_api_endpoint }} --host-id={{ scrutiny_collector_host_id }}"
+    job: "{{ scrutiny_collector_command }}"
   become: true
   tags: scrutiny_collector
   when: scrutiny_collector_cron | bool
+
+- name: Add scrutiny_collector to systemd
+  block:
+  - name: Template service
+    ansible.builtin.template:
+      src: service.j2
+      dest: /etc/systemd/system/scrutiny-collector.service
+      owner: root
+      group: root
+      mode: 0644
+    notify: reload scrutiny-collector.service
+
+  - name: Template timer
+    ansible.builtin.template:
+      src: timer.j2
+      dest: /etc/systemd/system/scrutiny-collector.timer
+      owner: root
+      group: root
+      mode: 0644
+    notify: restart scrutiny-collector.timer
+  
+  - name: Enable and start timer
+    ansible.builtin.systemd:
+      name: scrutiny-collector.timer
+      enabled: true
+      state: started
+  
+  - name: Flush handlers
+    ansible.builtin.meta: flush_handlers
+
+  become: true
+  tags: scrutiny_collector
+  when: scrutiny_collector_systemd | bool

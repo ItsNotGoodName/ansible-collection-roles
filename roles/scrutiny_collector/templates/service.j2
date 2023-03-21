@@ -1,0 +1,8 @@
+[Unit]
+Description=scrutiny-collector service
+
+[Service]
+Type=oneshot
+ExecStart={{ scrutiny_collector_command }}
+User=root
+Group=root

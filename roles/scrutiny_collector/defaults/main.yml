@@ -13,6 +13,8 @@ scrutiny_collector_url: "https://github.com/AnalogJ/scrutiny/releases/download/v
 # scrutiny_collector_checksum:
 scrutiny_collector_path: /usr/local/bin/scrutiny-collector-metrics
 
+scrutiny_collector_command: "{{ scrutiny_collector_path }} run --api-endpoint={{ scrutiny_collector_api_endpoint }} --host-id={{ scrutiny_collector_host_id }}"
+
 scrutiny_collector_cron: false
 scrutiny_collector_cron_minute: "0"
 scrutiny_collector_cron_hour: "*"
@@ -21,3 +23,6 @@ scrutiny_collector_cron_weekday: "*"
 
 scrutiny_collector_api_endpoint: http://localhost:8080
 scrutiny_collector_host_id: ""
+
+scrutiny_collector_systemd: false
+scrutiny_collector_systemd_on_calendar: hourly

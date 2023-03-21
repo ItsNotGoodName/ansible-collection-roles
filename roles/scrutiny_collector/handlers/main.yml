@@ -1,0 +1,13 @@
+---
+- name: restart scrutiny-collector.timer
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: true
+    name: scrutiny-collector.timer
+  become: true
+
+- name: reload scrutiny-collector.service
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: scrutiny-collector.service
+  become: true

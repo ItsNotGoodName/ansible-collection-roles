@@ -1,0 +1,10 @@
+[Unit]
+Description=scrutiny-collector timer
+
+[Timer]
+Unit=scrutiny-collector.service
+OnCalendar={{ scrutiny_collector_systemd_on_calendar }}
+Persistent=true
+
+[Install]
+WantedBy=timers.target
