@@ -1,0 +1,12 @@
+---
+lf_architectures:
+  arm64: arm64
+  armv5l: arm
+  armv6l: arm
+  armv7l: arm
+  x86_64: amd64
+lf_version: r28
+lf_platform: "{{ ansible_system | lower }}-{{ lf_architectures[ansible_architecture] }}"
+lf_url: "https://github.com/gokcehan/lf/releases/download/{{ lf_version }}/lf-{{ lf_platform }}.tar.gz"
+# lf_checksum:
+lf_path: /usr/local/bin/lf

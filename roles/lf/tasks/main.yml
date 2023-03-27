@@ -1,0 +1,43 @@
+---
+- name: Check if already installed
+  ansible.builtin.stat:
+    path: "{{ lf_path }}"
+  register: lf_binary_register
+  tags: lf
+
+- name: Get installed version
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ lf_binary_register.stat.path }} --version
+  args:
+    executable: /bin/bash
+  register: lf_version_register
+  changed_when: false
+  when: lf_binary_register.stat.exists
+  tags: lf
+
+- name: Install
+  block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ lf_url }}"
+        checksum: "{{ lf_checksum | default(omit) }}"
+        dest: /tmp/lf.tar.gz
+        mode: 0644
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: /tmp/lf.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      ansible.builtin.copy:
+        src: /tmp/lf
+        dest: "{{ lf_path }}"
+        mode: 0755
+        remote_src: true
+
+  become: true
+  tags: lf
+  when: not lf_binary_register.stat.exists or (lf_version_register.stdout | default('')) != lf_version
