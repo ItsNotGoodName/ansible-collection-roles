@@ -6,7 +6,7 @@ filebrowser_architectures:
   armv7l: armv7
   i386: 386
   x86_64: amd64
-filebrowser_version: "{{ undef(hint='Specify version (e.g. 2.22.0)') }}"
+filebrowser_version: "{{ undef(hint='Specify version (e.g. 2.23.0)') }}"
 filebrowser_platform: "{{ ansible_system | lower }}-{{ filebrowser_architectures[ansible_architecture] }}"
 filebrowser_url: "https://github.com/filebrowser/filebrowser/releases/download/v{{ filebrowser_version }}/{{ filebrowser_platform }}-filebrowser.tar.gz"
 # filebrowser_checksum:

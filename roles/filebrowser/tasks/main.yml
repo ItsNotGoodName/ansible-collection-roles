@@ -1,9 +1,4 @@
 ---
-- name: Merge config with default config
-  ansible.builtin.set_fact:
-    filebrowser_config: "{{ filebrowser_config_default | combine(filebrowser_config) }}"
-  tags: filebrowser
-
 - name: Create user
   ansible.builtin.user:
     name: "{{ filebrowser_user }}"
@@ -45,7 +40,7 @@
 
 - name: Copy config
   ansible.builtin.copy:
-    content: "{{ filebrowser_config | to_nice_yaml }}"
+    content: "{{ filebrowser_config_default | combine(filebrowser_config) | to_nice_yaml }}"
     dest: "{{ filebrowser_dir }}/.filebrowser.yml"
     owner: "{{ filebrowser_user }}"
     group: "{{ filebrowser_group }}"
