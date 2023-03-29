@@ -5,7 +5,7 @@ drive_architectures:
   armv6l: armv6
   armv7l: armv7
   x86_64: "{{ (ansible_system == 'Darwin') | ternary('darwin', 'linux') }}"
-drive_version: 0.4.0
+drive_version: "{{ undef(hint='Specify version (e.g. 0.4.0)') }}"
 drive_url: "https://github.com/odeke-em/drive/releases/download/v{{ drive_version }}/drive_{{ drive_architectures[ansible_architecture] }}"
 # drive_checksum:
 drive_path: /usr/local/bin/drive

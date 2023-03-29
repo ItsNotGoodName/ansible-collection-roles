@@ -1,5 +1,5 @@
 ---
-neovim_version: 0.7.0
+neovim_version: "{{ undef(hint='Specify version (e.g. 0.7.0)') }}"
 neovim_url_deb: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/nvim-linux64.deb"
 # neovim_checksum_deb:
 neovim_url_appimage: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/nvim.appimage"

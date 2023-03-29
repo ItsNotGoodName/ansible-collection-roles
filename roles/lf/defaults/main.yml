@@ -5,7 +5,7 @@ lf_architectures:
   armv6l: arm
   armv7l: arm
   x86_64: amd64
-lf_version: r28
+lf_version: "{{ undef(hint='Specify version (e.g. r28)') }}"
 lf_platform: "{{ ansible_system | lower }}-{{ lf_architectures[ansible_architecture] }}"
 lf_url: "https://github.com/gokcehan/lf/releases/download/{{ lf_version }}/lf-{{ lf_platform }}.tar.gz"
 # lf_checksum:

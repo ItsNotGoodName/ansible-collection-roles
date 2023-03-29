@@ -7,7 +7,7 @@ adguardhome_sync_architectures:
   i386: i386
   x86_64: x86_64
 adguardhome_sync_platform: "{{ ansible_system | lower }}_{{ adguardhome_sync_architectures[ansible_architecture] }}"
-adguardhome_sync_version: 0.4.3
+adguardhome_sync_version: "{{ undef(hint='Specify version (e.g. 0.4.3)') }}"
 adguardhome_sync_url: "https://github.com/bakito/adguardhome-sync/releases/download/v{{ adguardhome_sync_version }}/adguardhome-sync_{{ adguardhome_sync_version }}_{{ adguardhome_sync_platform }}.tar.gz"
 # adguardhome_sync_checksum:
 adguardhome_sync_path: /usr/local/bin/adguardhome-sync
