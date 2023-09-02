@@ -1,0 +1,30 @@
+---
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ go2rtc_user }}"
+  become: true
+  tags: go2rtc
+
+- import_tasks: install.yml
+
+- name: Template service
+  ansible.builtin.template:
+    src: service.j2
+    dest: /etc/systemd/system/go2rtc.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart go2rtc
+  tags: go2rtc
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: go2rtc
+    enabled: true
+  become: true
+  tags: go2rtc
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: go2rtc

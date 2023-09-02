@@ -1,0 +1,31 @@
+---
+- name: Check if already installed
+  ansible.builtin.stat:
+    path: "{{ go2rtc_path }}"
+  register: go2rtc_binary_register
+  tags: go2rtc
+
+- name: Get installed version
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ go2rtc_binary_register.stat.path }} --version | grep -oP '\K[0-9]*\.[0-9]*\.[0-9]*'
+  args:
+    executable: /bin/bash
+  register: go2rtc_version_register
+  changed_when: false
+  when: go2rtc_binary_register.stat.exists
+  tags: go2rtc
+
+- name: Install
+  block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ go2rtc_url }}"
+        checksum: "{{ go2rtc_checksum | default(omit) }}"
+        dest: "{{ go2rtc_path }}"
+        mode: 0755
+      notify: restart go2rtc
+
+  become: true
+  tags: go2rtc
+  when: not go2rtc_binary_register.stat.exists or (go2rtc_version_register.stdout | default('')) != go2rtc_version

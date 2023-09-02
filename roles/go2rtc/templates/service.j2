@@ -1,0 +1,11 @@
+[Unit]
+Description=Ultimate camera streaming application with support RTSP, WebRTC, HomeKit, FFmpeg, RTMP, etc.
+
+[Service]
+ExecStart={{ go2rtc_path }}
+WorkingDirectory={{ go2rtc_dir }}
+User={{ go2rtc_user }}
+Group={{ go2rtc_group }}
+
+[Install]
+WantedBy=multi-user.target
