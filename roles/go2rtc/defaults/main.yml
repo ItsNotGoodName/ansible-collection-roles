@@ -1,4 +1,6 @@
 ---
+go2rtc_packages:
+  - ffmpeg
 go2rtc_architectures:
   arm64: arm64
   armv6l: armv6

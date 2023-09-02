@@ -1,4 +1,11 @@
 ---
+- name: Install packages
+  package:
+    name: "{{ go2rtc_packages }}"
+    state: present
+  become: true
+  tags: go2rtc
+
 - name: Create user
   ansible.builtin.user:
     name: "{{ go2rtc_user }}"
