@@ -1,7 +1,7 @@
 ---
 blocky_platform: "{{ ansible_system }}_{{ ansible_architecture }}"
 blocky_version: "{{ undef(hint='Specify version (e.g. 0.20)') }}"
-blocky_url: "https://github.com/0xERR0R/blocky/releases/download/v{{ blocky_version }}/blocky_{{ blocky_version }}_{{ blocky_platform }}.tar.gz"
+blocky_url: "https://github.com/0xERR0R/blocky/releases/download/v{{ blocky_version }}/blocky_v{{ blocky_version }}_{{ blocky_platform }}.tar.gz"
 # blocky_checksum:
 blocky_path: /usr/local/bin/blocky
 blocky_user: blocky
