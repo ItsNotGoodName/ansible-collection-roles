@@ -40,4 +40,4 @@
 
   become: true
   tags: croc
-  when: not croc_binary_register.stat.exists or (croc_version_register.stdout | default('')) != croc_version
+  when: not croc_binary_register.stat.exists or croc_version not in (croc_version_register.stdout | default('')) 
