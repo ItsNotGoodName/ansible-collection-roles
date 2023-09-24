@@ -1,0 +1,12 @@
+---
+kopia_architectures:
+  arm64: arm64
+  armv5l: arm
+  armv6l: arm
+  armv7l: arm
+  x86_64: x64
+kopia_version: "{{ undef(hint='Specify version (e.g. 0.14.1)') }}"
+kopia_platform: "{{ ansible_system | lower }}-{{ kopia_architectures[ansible_architecture] }}"
+kopia_url: "https://github.com/kopia/kopia/releases/download/v{{ kopia_version }}/kopia-{{ kopia_version }}-{{ kopia_platform }}.tar.gz"
+# kopia_checksum:
+kopia_path: /usr/local/bin/kopia
