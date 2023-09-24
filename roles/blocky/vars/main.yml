@@ -1,0 +1,3 @@
+---
+blocky_facts:
+  version: "{{ blocky_version }}"
