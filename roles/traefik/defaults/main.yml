@@ -1,0 +1,16 @@
+---
+traefik_architectures:
+  arm64: arm64
+  armv6l: armv6
+  armv7l: armv7
+  i386: 386
+  x86_64: amd64
+traefik_platform: "{{ ansible_system | lower }}_{{ traefik_architectures[ansible_architecture] }}"
+traefik_version: "{{ undef(hint='Specify version (e.g. 2.10.5)') }}"
+traefik_url: "https://github.com/traefik/traefik/releases/download/v{{ traefik_version }}/traefik_v{{ traefik_version }}_{{ traefik_platform }}.tar.gz"
+# traefik_checksum:
+traefik_path: /usr/local/bin/traefik
+traefik_user: traefik
+traefik_group: "{{ traefik_user }}"
+traefik_dir: "/home/{{ traefik_user }}"
+# traefik_config:

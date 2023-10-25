@@ -1,0 +1,3 @@
+---
+traefik_facts:
+  version: "{{ traefik_version }}"

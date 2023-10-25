@@ -1,0 +1,41 @@
+---
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ traefik_user }}"
+  become: true
+  tags: traefik
+
+- import_tasks: install.yml
+
+- name: Copy config
+  ansible.builtin.copy:
+    content: "{{ traefik_config | to_nice_yaml }}"
+    dest: "{{ traefik_dir }}/traefik.yml"
+    owner: "{{ traefik_user }}"
+    group: "{{ traefik_group }}"
+    mode: 0600
+  become: true
+  tags: traefik
+  when: traefik_config is defined
+
+- name: Template service
+  ansible.builtin.template:
+    src: service.j2
+    dest: /etc/systemd/system/traefik.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart traefik
+  tags: traefik
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: traefik
+    enabled: true
+  become: true
+  tags: traefik
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: traefik
