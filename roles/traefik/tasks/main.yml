@@ -15,6 +15,7 @@
     group: "{{ traefik_group }}"
     mode: 0600
   become: true
+  notify: restart traefik
   tags: traefik
   when: traefik_config is defined
 
