@@ -1,0 +1,11 @@
+---
+just_architectures:
+  arm64: aarch64
+  armv5l: arm
+  armv6l: arm
+  armv7l: armv7
+  x86_64: x86_64
+just_version: "{{ undef(hint='Specify version (e.g. 1.16.0)') }}"
+just_url: "https://github.com/casey/just/releases/download/{{ just_version }}/just-{{ just_version }}-{{ just_architectures[ansible_architecture] }}-unknown-{{ ansible_system | lower }}-musl.tar.gz"
+# just_checksum:
+just_path: /usr/local/bin/just

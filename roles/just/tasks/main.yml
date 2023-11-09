@@ -1,0 +1,43 @@
+---
+- name: Check if already installed
+  ansible.builtin.stat:
+    path: "{{ just_path }}"
+  register: just_binary_register
+  tags: just
+
+- name: Get installed version
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ just_binary_register.stat.path }} --version | cut -d " " -f2
+  args:
+    executable: /bin/bash
+  register: just_version_register
+  changed_when: false
+  when: just_binary_register.stat.exists
+  tags: just
+
+- name: Install
+  block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ just_url }}"
+        checksum: "{{ just_checksum | default(omit) }}"
+        dest: /tmp/just.tar.gz
+        mode: 0644
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: /tmp/just.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      ansible.builtin.copy:
+        src: /tmp/just
+        dest: "{{ just_path }}"
+        mode: 0755
+        remote_src: true
+
+  become: true
+  tags: just
+  when: not just_binary_register.stat.exists or just_version not in (just_version_register.stdout | default(''))
