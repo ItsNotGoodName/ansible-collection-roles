@@ -1,0 +1,17 @@
+---
+mediamtx_packages:
+  - ffmpeg
+mediamtx_architectures:
+  arm64: arm64
+  armv6l: armv6
+  armv7l: armv7
+  i386: i386
+  x86_64: amd64
+mediamtx_platform: "{{ ansible_system | lower }}_{{ mediamtx_architectures[ansible_architecture] }}"
+mediamtx_version: "{{ undef(hint='Specify version (e.g. 1.6.0)') }}"
+mediamtx_url: "https://github.com/bluenviron/mediamtx/releases/download/v{{ mediamtx_version }}/mediamtx_v{{ mediamtx_version }}_{{ mediamtx_platform }}.tar.gz"
+# mediamtx_checksum:
+mediamtx_path: /usr/local/bin/mediamtx
+mediamtx_user: mediamtx
+mediamtx_group: "{{ mediamtx_user }}"
+mediamtx_dir: "/home/{{ mediamtx_user }}"

@@ -1,0 +1,11 @@
+[Unit]
+Description=Ready-to-use SRT / WebRTC / RTSP / RTMP / LL-HLS media server and media proxy that allows to read, publish, proxy, record and playback video and audio streams. 
+
+[Service]
+ExecStart={{ mediamtx_path }}
+WorkingDirectory={{ mediamtx_dir }}
+User={{ mediamtx_user }}
+Group={{ mediamtx_group }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,54 @@
+# vim:ft=yaml.ansible
+---
+- name: Check if already installed
+  ansible.builtin.stat:
+    path: "{{ mediamtx_path }}"
+  register: mediamtx_binary_register
+  tags: mediamtx
+
+- name: Get installed version
+  ansible.builtin.shell: |
+    set -o pipefail
+    {{ mediamtx_binary_register.stat.path }} --version
+  args:
+    executable: /bin/bash
+  register: mediamtx_version_register
+  changed_when: false
+  when: mediamtx_binary_register.stat.exists
+  tags: mediamtx
+
+- name: Install
+  become: true
+  tags: mediamtx
+  notify: restart mediamtx
+  when: not mediamtx_binary_register.stat.exists or (mediamtx_version_register.stdout | default('')) != 'v' + mediamtx_version
+  block:
+    - name: Download
+      ansible.builtin.get_url:
+        url: "{{ mediamtx_url }}"
+        checksum: "{{ mediamtx_checksum | default(omit) }}"
+        dest: /tmp/mediamtx.tar.gz
+        mode: "0644"
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: /tmp/mediamtx.tar.gz
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      ansible.builtin.copy:
+        src: /tmp/mediamtx
+        dest: "{{ mediamtx_path }}"
+        mode: "0755"
+        remote_src: true
+
+    - name: Copy config
+      ansible.builtin.copy:
+        src: /tmp/mediamtx.yml
+        dest: "{{ mediamtx_dir }}/mediamtx.yml"
+        owner: "{{ mediamtx_user }}"
+        group: "{{ mediamtx_group }}"
+        remote_src: true
+        force: false
+        mode: "0755"
