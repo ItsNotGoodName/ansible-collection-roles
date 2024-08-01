@@ -1,0 +1,11 @@
+---
+lazydocker_architectures:
+  arm64: arm64
+  armv6l: armv6
+  armv7l: armv7
+  x86_64: x86_64
+lazydocker_version: "{{ undef(hint='Specify version (e.g. 0.23.3)') }}"
+lazydocker_platform: "{{ ansible_system }}_{{ lazydocker_architectures[ansible_architecture] }}"
+lazydocker_archive: "lazydocker_{{ lazydocker_version }}_{{ lazydocker_platform }}.tar.gz"
+lazydocker_url: "https://github.com/jesseduffield/lazydocker/releases/download/v{{ lazydocker_version }}/{{ lazydocker_archive }}"
+lazydocker_path: /usr/local/bin/lazydocker

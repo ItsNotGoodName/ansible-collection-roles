@@ -1,0 +1,44 @@
+# vim:ft=yaml.ansible
+---
+- name: "Check if {{ lazydocker_path }} exists"
+  stat:
+    path: "{{ lazydocker_path }}"
+  register: binary_register
+  tags: lazydocker
+
+- name: Get installed version
+  shell: "{{ binary_register.stat.path }} version | grep Version | cut -f2 -d ' '"
+  register: version_register
+  changed_when: false
+  when: binary_register.stat.exists
+  tags: lazydocker
+
+- name: Set install variables
+  set_fact:
+    lazydocker_installed: "{{ binary_register.stat.exists }}"
+    lazydocker_installed_version: "{{ version_register.stdout | default(False) }}"
+  tags: lazydocker
+
+- block:
+    - name: Download
+      get_url:
+        url: "{{ lazydocker_url }}"
+        dest: /tmp
+        checksum: "{{ lazydocker_checksum }}"
+
+    - name: unarchive
+      unarchive:
+        src: "/tmp/{{ lazydocker_archive }}"
+        dest: /tmp
+        remote_src: true
+
+    - name: Install
+      copy:
+        src: /tmp/lazydocker
+        dest: "{{ lazydocker_path }}"
+        mode: 0755
+        remote_src: true
+
+  when: not lazydocker_installed or lazydocker_installed_version != lazydocker_version
+  become: true
+  tags: lazydocker
