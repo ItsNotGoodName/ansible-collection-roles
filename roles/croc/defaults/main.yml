@@ -7,6 +7,6 @@ croc_architectures:
   x86_64: 64bit
 croc_version: "{{ undef(hint='Specify version (e.g. 9.6.5)') }}"
 croc_platform: "{{ ansible_system }}-{{ croc_architectures[ansible_architecture] }}"
-croc_url: "https://github.com/schollz/croc/releases/download/v{{ croc_version }}/croc_{{ croc_version }}_{{ croc_platform }}.tar.gz"
+croc_url: "https://github.com/schollz/croc/releases/download/v{{ croc_version }}/croc_v{{ croc_version }}_{{ croc_platform }}.tar.gz"
 # croc_checksum:
 croc_path: /usr/local/bin/croc
