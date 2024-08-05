@@ -1,3 +1,4 @@
 # vim:ft=yaml.ansible
 ---
-- import_tasks: install.yml
+- name: Install
+  ansible.builtin.import_tasks: install.yml

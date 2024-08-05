@@ -1,0 +1,49 @@
+# vim:ft=yaml.ansible
+---
+- name: Install
+  become: true
+  tags: neovim
+  when: ansible_facts.ansible_local['neovim'] is not defined or (ansible_facts.ansible_local.neovim.version | string) != (neovim_version | string)
+  block:
+    - name: Download and install
+      ansible.builtin.get_url:
+        checksum: "{{ neovim_checksum | default(omit) }}"
+        dest: "/tmp"
+        url: "{{ neovim_url }}"
+        mode: "0755"
+
+    - name: Create /opt/neovim
+      ansible.builtin.file:
+        path: /opt
+        state: directory
+        mode: "0755"
+
+    - name: Unarchive
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ neovim_archive }}"
+        dest: /opt
+        remote_src: true
+
+    - name: Create facts directory
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Update facts
+      ansible.builtin.copy:
+        content: "{{ neovim_facts | to_nice_json }}"
+        dest: /etc/ansible/facts.d/neovim.fact
+        owner: root
+        group: root
+        mode: "0644"
+
+- name: Create link
+  ansible.builtin.file:
+    path: "{{ neovim_path }}"
+    state: link
+    src: "/opt/nvim-linux64/bin/nvim"
+  become: true
+  tags: neovim

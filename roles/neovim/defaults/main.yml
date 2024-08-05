@@ -1,0 +1,6 @@
+---
+neovim_version: "{{ undef(hint='Specify version (e.g. 0.10.1)') }}"
+neovim_archive: nvim-linux64.tar.gz
+neovim_url: "https://github.com/neovim/neovim/releases/download/v{{ neovim_version }}/{{ neovim_archive }}"
+# neovim_checksum:
+neovim_path: /usr/local/bin/nvim

@@ -1,3 +1,4 @@
+# vim:ft=yaml.ansible
 ---
 - name: Check if already installed
   ansible.builtin.stat:
@@ -17,13 +18,16 @@
   tags: croc
 
 - name: Install
+  become: true
+  tags: croc
+  when: not croc_binary_register.stat.exists or croc_version not in (croc_version_register.stdout | default(''))
   block:
     - name: Download
       ansible.builtin.get_url:
         url: "{{ croc_url }}"
         checksum: "{{ croc_checksum | default(omit) }}"
         dest: /tmp/croc.tar.gz
-        mode: 0644
+        mode: "0644"
 
     - name: Unarchive
       ansible.builtin.unarchive:
@@ -35,9 +39,5 @@
       ansible.builtin.copy:
         src: /tmp/croc
         dest: "{{ croc_path }}"
-        mode: 0755
+        mode: "0755"
         remote_src: true
-
-  become: true
-  tags: croc
-  when: not croc_binary_register.stat.exists or croc_version not in (croc_version_register.stdout | default('')) 
