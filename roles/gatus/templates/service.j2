@@ -1,0 +1,13 @@
+[Unit]
+Description=Automated developer-oriented status page
+
+[Service]
+AmbientCapabilities=CAP_NET_RAW
+Environment=GATUS_CONFIG_PATH={{ gatus_config_path }}
+ExecStart={{ gatus_path }}
+WorkingDirectory={{ gatus_dir }}
+User={{ gatus_user }}
+Group={{ gatus_group }}
+
+[Install]
+WantedBy=multi-user.target

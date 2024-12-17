@@ -1,0 +1,7 @@
+---
+gatus_path: /usr/local/bin/gatus
+gatus_user: gatus
+gatus_group: "{{ gatus_user }}"
+gatus_dir: "/home/{{ gatus_user }}"
+gatus_config_path: "{{ gatus_dir }}/gatus.yaml"
+# gatus_config:
