@@ -21,6 +21,7 @@
     name: gatus
     enabled: true
   become: true
+  notify: restart gatus
   tags: gatus
 
 - name: Copy config
@@ -31,6 +32,7 @@
     group: "{{ gatus_group }}"
     mode: 0600
   become: true
+  notify: restart gatus
   tags: gatus
 
 - name: Flush handlers
