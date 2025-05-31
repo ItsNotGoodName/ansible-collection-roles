@@ -1,0 +1,9 @@
+---
+base_packages:
+  - curl
+  - git
+  - htop
+  - ncdu
+  - rsync--
+  - vim--no_x11
+base_rc_file: ""

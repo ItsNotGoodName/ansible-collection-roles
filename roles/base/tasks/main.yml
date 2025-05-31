@@ -1,0 +1,96 @@
+---
+- name: Include OS-specific variables
+  ansible.builtin.include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "vars/{{ ansible_os_family }}.yml"
+      skip: true
+  tags: base
+
+- name: Apt update
+  when: ansible_os_family == 'Debian'
+  become: true
+  block:
+    - name: Only run "update_cache=yes" if last one is more than 3600 seconds ago
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      changed_when: false
+      tags: base, base_update
+
+    - name: Update system (Debian)
+      ansible.builtin.apt:
+        upgrade: dist
+      tags: never, base_update
+
+- name: Yum update
+  when: ansible_os_family == 'RedHat'
+  become: true
+  block:
+    - name: Update system (RedHat)
+      ansible.builtin.yum:
+        name: "*"
+        state: latest
+      become: true
+      tags: never, base_update
+
+- name: Pacman update
+  when: ansible_os_family == 'Arch'
+  become: true
+  block:
+    - name: Update system (Arch)
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+      tags: never, base_update
+
+- name: Pkg update
+  when: ansible_os_family == 'OpenBSD'
+  become: true
+  block:
+    - name: Update system (OpenBSD)
+      community.general.openbsd_pkg:
+        name: "*"
+        state: latest
+      tags: never, base_update
+
+- name: Install base packages
+  ansible.builtin.package:
+    name: "{{ base_packages }}"
+    state: present
+  become: true
+  tags: base
+
+- name: Set vi mode for shell
+  ansible.builtin.lineinfile:
+    line: "{{ item }}"
+    dest: "{{ base_rc_file }}"
+    insertbefore: BOF
+  loop:
+    - set -o vi
+    - bind -m vi-insert "\C-l":clear-screen
+  become: true
+  tags: base
+  when: (base_vi_mode | bool) and base_rc_file != ""
+
+- name: Copy tmux.conf to /etc/tmux.conf
+  ansible.builtin.copy:
+    src: tmux.conf
+    dest: /etc/tmux.conf
+    mode: 0644
+  become: true
+  tags: base
+
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ base_timezone }}"
+  become: true
+  tags: base
+  when: base_timezone | default(False)
+
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: "{{ base_hostname }}"
+  become: true
+  tags: base
+  when: base_hostname | default(False)

@@ -1,0 +1,20 @@
+---
+# Packages to install
+base_packages:
+  - curl
+  - git
+  - htop
+  - ncdu
+  - rsync
+  - tmux
+  - unzip
+  - vim
+
+# File that is sourced
+base_rc_file: /etc/bash.bashrc
+
+# Enable vi mode for shell
+base_vi_mode: true
+## Optional variables
+# base_hostname: CHANGEME
+# base_timezone: CHANGEME
