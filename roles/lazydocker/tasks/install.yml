@@ -10,6 +10,8 @@
   ansible.builtin.shell: |
     set -o pipefail
     {{ binary_register.stat.path }} version | grep Version | cut -f2 -d ' '
+  args:
+    executable: /bin/bash
   register: version_register
   changed_when: false
   when: binary_register.stat.exists
@@ -30,7 +32,7 @@
       ansible.builtin.get_url:
         url: "{{ lazydocker_url }}"
         dest: /tmp
-        checksum: "{{ lazydocker_checksum }}"
+        checksum: "{{ lazydocker_checksum | default(omit) }}"
         mode: "0644"
 
     - name: Unarchive
