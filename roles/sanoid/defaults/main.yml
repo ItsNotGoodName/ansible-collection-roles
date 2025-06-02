@@ -1,0 +1,3 @@
+---
+sanoid_path_config: "/etc/sanoid"
+sanoid_file_config: "{{ sanoid_path_config }}/sanoid.conf"
