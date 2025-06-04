@@ -9,9 +9,9 @@
   become: true
   tags: sanoid
 
-- name: "Create {{ sanoid_path_config }}"
+- name: "Create {{ sanoid_config_dir }}"
   ansible.builtin.file:
-    path: "{{ sanoid_path_config }}"
+    path: "{{ sanoid_config_dir }}"
     state: directory
     mode: "0755"
   become: true
@@ -19,9 +19,10 @@
 
 - name: Configure sanoid
   ansible.builtin.copy:
-    content: "{{ sanoid_config }}"
-    dest: "{{ sanoid_file_config }}"
+    src: "{{ sanoid_config | default(omit) }}"
+    content: "{{ sanoid_config_content | default(omit) }}"
+    dest: "{{ sanoid_config_file }}"
     mode: "0644"
-  when: sanoid_config is defined
+  when: sanoid_config is defined or sanoid_config_content is defined
   become: true
   tags: sanoid
