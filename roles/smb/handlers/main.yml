@@ -1,0 +1,7 @@
+# vim:ft=yaml.ansible
+---
+- name: Restart smb
+  ansible.builtin.service:
+    name: "smbd"
+    state: "restarted"
+  become: true

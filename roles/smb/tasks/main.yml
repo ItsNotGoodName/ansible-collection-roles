@@ -1,0 +1,24 @@
+# vim:ft=yaml.ansible
+---
+- name: Install samba
+  ansible.builtin.apt:
+    name: samba
+    state: present
+  when: ansible_os_family == "Debian"
+  become: true
+  tags: smb
+
+- name: Copy smb config
+  ansible.builtin.copy:
+    src: "{{ smb_config | default(omit) }}"
+    content: "{{ smb_config_content | default(omit) }}"
+    dest: "/etc/samba/smb.conf"
+    mode: "644"
+  when: smb_config is defined or smb_config_content is defined
+  notify: Restart smb
+  become: true
+  tags: smb
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+  tags: smb

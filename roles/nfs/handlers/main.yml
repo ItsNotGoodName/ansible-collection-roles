@@ -1,0 +1,7 @@
+# vim:ft=yaml.ansible
+---
+- name: Restart nfs
+  ansible.builtin.service:
+    name: "nfs-kernel-server"
+    state: restarted
+  become: true
