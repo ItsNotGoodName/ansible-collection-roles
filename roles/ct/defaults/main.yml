@@ -3,7 +3,5 @@ ct_user: ct
 ct_path: "/home/{{ ct_user }}/containers"
 ct_groups:
   - docker
-ct_env_content: |
-  PUID={{ ct_user_register["uid"] }}
-  PGID={{ ct_user_register["group"] }}
 ct_containers: []
+ct_env:

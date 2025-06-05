@@ -8,38 +8,53 @@
     append: true
   register: ct_user_register
   become: true
-  tags: ct
+  tags:
+    - ct
+    - ct_update
+    - ct_start
 
 - name: Create ct directory
   ansible.builtin.file:
     path: "{{ ct_path }}"
+    state: directory
+    mode: "755"
   become: true
   become_user: "{{ ct_user }}"
   tags: ct
 
 - name: Sync ct files
   ansible.posix.synchronize:
-    src: "{{ ct_files }}"
+    src: "{{ ct_files }}/"
     dest: "{{ ct_path }}/"
+  failed_when: false
   when: ct_files is defined
   become: true
   become_user: "{{ ct_user }}"
   tags: ct
 
-- name: Set .env file
+- name: Set env files
   ansible.builtin.copy:
-    content: "{{ ct_env_content }}"
-    dest: "{{ ct_path }}/.env"
+    content: |
+      {{ ct_env }}
+      {% if item.env is defined %}
+      {{ item.env }}
+      {% endif %}
+    dest: "{{ ct_path }}/{{ item.name }}/.env"
     mode: "644"
+  loop: "{{ ct_containers }}"
+  loop_control:
+    label: "{{ item.name }}"
   become: true
   become_user: "{{ ct_user }}"
   tags: ct
 
 - name: Start/update containers
   ansible.builtin.command:
-    chdir: "{{ ct_path }}/{{ item }}"
+    chdir: "{{ ct_path }}/{{ item.name }}"
     cmd: "docker compose up -d {{ ('ct_update' in ansible_run_tags) | ternary('--pull always', '') }}"
   loop: "{{ ct_containers }}"
+  loop_control:
+    label: "{{ item.name }}"
   changed_when: true
   become: true
   tags:
