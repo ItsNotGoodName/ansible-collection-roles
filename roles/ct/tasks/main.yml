@@ -24,10 +24,10 @@
 
 - name: Sync ct files
   ansible.posix.synchronize:
-    src: "{{ ct_files }}/"
+    src: "{{ ct_files_local }}/"
     dest: "{{ ct_path }}/"
   failed_when: false
-  when: ct_files is defined
+  when: ct_files_local is defined
   become: true
   become_user: "{{ ct_user }}"
   tags: ct

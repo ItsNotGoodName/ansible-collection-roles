@@ -10,11 +10,11 @@
 
 - name: Copy export config
   ansible.builtin.copy:
-    src: "{{ nfs_config | default(omit) }}"
+    src: "{{ nfs_config_local | default(omit) }}"
     content: "{{ nfs_config_content | default(omit) }}"
     dest: "/etc/exports"
     mode: "644"
-  when: nfs_config is defined or nfs_config_content is defined
+  when: nfs_config_local is defined or nfs_config_content is defined
   notify: Restart nfs
   become: true
   tags: nfs

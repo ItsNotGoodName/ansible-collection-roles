@@ -10,11 +10,11 @@
 
 - name: Copy smb config
   ansible.builtin.copy:
-    src: "{{ smb_config | default(omit) }}"
+    src: "{{ smb_config_local | default(omit) }}"
     content: "{{ smb_config_content | default(omit) }}"
     dest: "/etc/samba/smb.conf"
     mode: "644"
-  when: smb_config is defined or smb_config_content is defined
+  when: smb_config_local is defined or smb_config_content is defined
   notify: Restart smb
   become: true
   tags: smb

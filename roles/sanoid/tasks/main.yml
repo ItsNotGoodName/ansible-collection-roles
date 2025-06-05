@@ -19,10 +19,10 @@
 
 - name: Configure sanoid
   ansible.builtin.copy:
-    src: "{{ sanoid_config | default(omit) }}"
+    src: "{{ sanoid_config_local | default(omit) }}"
     content: "{{ sanoid_config_content | default(omit) }}"
     dest: "{{ sanoid_config_file }}"
     mode: "0644"
-  when: sanoid_config is defined or sanoid_config_content is defined
+  when: sanoid_config_local is defined or sanoid_config_content is defined
   become: true
   tags: sanoid
