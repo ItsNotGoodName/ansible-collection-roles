@@ -3,6 +3,7 @@
 - name: "Create user {{ ct_user }}"
   ansible.builtin.user:
     name: "{{ ct_user }}"
+    uid: "{{ ct_uid | default(omit) }}"
     shell: "{{ ct_shell | default(omit) }}"
     groups: "{{ ct_groups | default(omit) }}"
     append: true
@@ -17,16 +18,19 @@
   ansible.builtin.file:
     path: "{{ ct_path }}"
     state: directory
+    owner: "{{ ct_user }}"
+    group: "{{ ct_user }}"
     mode: "755"
   become: true
-  become_user: "{{ ct_user }}"
   tags: ct
 
 - name: Sync ct files
   ansible.posix.synchronize:
     src: "{{ ct_files_local }}/"
     dest: "{{ ct_path }}/"
-  failed_when: false
+    rsync_opts:
+      - --exclude='.keep'
+  ignore_errors: true
   when: ct_files_local is defined
   become: true
   become_user: "{{ ct_user }}"
@@ -40,12 +44,13 @@
       {{ item.env }}
       {% endif %}
     dest: "{{ ct_path }}/{{ item.name }}/.env"
+    owner: "{{ ct_user }}"
+    group: "{{ ct_user }}"
     mode: "644"
   loop: "{{ ct_containers }}"
   loop_control:
     label: "{{ item.name }}"
   become: true
-  become_user: "{{ ct_user }}"
   tags: ct
 
 - name: Start/update containers
