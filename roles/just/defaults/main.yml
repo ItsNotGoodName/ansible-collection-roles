@@ -1,6 +1,6 @@
 ---
 just_architectures:
-  arm64: aarch64
+  aarch64: aarch64
   armv5l: arm
   armv6l: arm
   armv7l: armv7

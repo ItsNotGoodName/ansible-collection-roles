@@ -1,6 +1,6 @@
 ---
 kopia_architectures:
-  arm64: arm64
+  aarch64: arm64
   armv5l: arm
   armv6l: arm
   armv7l: arm

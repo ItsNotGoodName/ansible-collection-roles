@@ -1,6 +1,6 @@
 ---
 lazydocker_architectures:
-  arm64: arm64
+  aarch64: arm64
   armv6l: armv6
   armv7l: armv7
   x86_64: x86_64

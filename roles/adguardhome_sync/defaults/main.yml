@@ -1,6 +1,6 @@
 ---
 adguardhome_sync_architectures:
-  arm64: arm64
+  aarch64: arm64
   armv5l: armv5
   armv6l: armv6
   armv7l: armv7

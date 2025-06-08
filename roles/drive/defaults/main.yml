@@ -1,6 +1,6 @@
 ---
 drive_architectures:
-  arm64: armv8
+  aarch64: armv8
   armv5l: armv5
   armv6l: armv6
   armv7l: armv7

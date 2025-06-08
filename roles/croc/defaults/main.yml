@@ -1,6 +1,6 @@
 ---
 croc_architectures:
-  arm64: ARM64
+  aarch64: ARM64
   armv5l: ARM
   armv6l: ARM
   armv7l: ARM

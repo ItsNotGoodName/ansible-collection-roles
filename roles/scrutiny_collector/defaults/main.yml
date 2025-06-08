@@ -2,7 +2,7 @@
 scrutiny_collector_packages:
   - smartmontools
 scrutiny_collector_architectures:
-  arm64: arm64
+  aarch64: arm64
   armv5l: arm-5
   armv6l: arm-6
   armv7l: arm-7
