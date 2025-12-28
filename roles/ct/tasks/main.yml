@@ -24,7 +24,7 @@
   become: true
   tags: ct
 
-- name: Sync ct files
+- name: Sync local ct files
   ansible.posix.synchronize:
     src: "{{ ct_files_local }}/"
     dest: "{{ ct_path }}/"
@@ -34,6 +34,19 @@
   when: ct_files_local is defined
   become: true
   become_user: "{{ ct_user }}"
+  tags: ct
+
+- name: Set ct files
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: "{{ ct_path }}/{{ item.dest }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+  loop: "{{ ct_files }}"
+  loop_control:
+    label: "{{ item.dest }}"
+  become: true
   tags: ct
 
 - name: Set env files
